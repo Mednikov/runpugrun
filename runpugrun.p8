@@ -2,57 +2,82 @@ pico-8 cartridge // http://www.pico-8.com
 version 4
 __lua__
 
-pug = {}
-pug.x = 30
-pug.y = 95
-pug.speed = 2
+pug = {
+  x = 30,
+  y = 95,
+  speed = 2,
 
-pug.startspr = 4
-pug.endspr = 7
+  startSpr = 4,
+  endSpr = 7,
 
-pug.sprite = pug.startspr
+  moving = false,
+  move = {
+    startSpr = 20,
+    endSpr = 23
+  },
 
-pug.moving = false
-pug.movingstartspr = 20
-pug.movingendspr = 23
+  flip = false
+}
 
-pug.flip = false
+pug.sprite = pug.startSpr
 
-function pugstanding()
-  pug.sprite += 1
-  if (pug.sprite > pug.endspr) then
-    pug.sprite = pug.startspr
+function pugAnimate(startSprite, endSprite)
+  pug.sprite += 0.5
+  if pug.sprite > endSprite then
+    pug.sprite = startSprite
   end
 end
 
-function pugmoving()
+function pugHandle()
   pug.moving = false
   if btn(0) then
     pug.moving = true
     pug.flip = true
     pug.x -= pug.speed
+    pugAnimate(pug.move.startSpr, pug.move.endSpr)
   end
   if btn(1) then
     pug.moving = true
     pug.flip = false
     pug.x += pug.speed
+    pugAnimate(pug.move.startSpr, pug.move.endSpr)
+  end
+  if not pug.moving then
+    pugAnimate(pug.startSpr, pug.endSpr)
   end
 end
 
-function test()
-  if pug.moving then
-    if (pug.sprite > pug.movingendspr) then
-      pug.sprite = pug.movingstartspr
-    end
-  end
-end
+-- function pugmoving()
+--   pug.moving = false
+--   if btn(0) then
+--     pug.moving = true
+--     pug.flip = true
+--     pug.x -= pug.speed
+--   end
+--   if btn(1) then
+--     pug.moving = true
+--     pug.flip = false
+--     pug.x += pug.speed
+--   end
+-- end
+
+-- function test()
+--   if pug.moving then
+--     if (pug.sprite > pug.movingendSpr) then
+--       pug.sprite = pug.movingstartSpr
+--     end
+--   end
+-- end
+
+
+
 
 -- function move()
 --   pug.moving = true
---   pug.sprite = pug.movingstartspr
+--   pug.sprite = pug.movingstartSpr
 --   pug.sprite += 1
---   if (pug.sprite > pug.movingendspr) then
---     pug.sprite = pug.movingstartspr
+--   if (pug.sprite > pug.movingendSpr) then
+--     pug.sprite = pug.movingstartSpr
 --   end
 -- end
 
@@ -69,9 +94,13 @@ end
 --   end
 
 --   if not pug.moving then
---     pug.sprite = pug.startspr
+--     pug.sprite = pug.startSpr
 --   end
 -- end
+
+
+
+
 
 function _init()
   cls()
@@ -81,9 +110,9 @@ end
 
 function _update()
   -- runpug()
-  pugstanding()
-  pugmoving()
-  test()
+  pugHandle()
+  -- pugmoving()
+  -- test()
 end
 
 function _draw()
