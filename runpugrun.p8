@@ -22,7 +22,8 @@ pug = {
 pug.sprite = pug.startSpr
 
 function pugAnimate(startSprite, endSprite)
-  pug.sprite += 0.5
+  pug.sprite += 1
+  if pug.sprite < endSprite then pug.sprite = endSprite end
   if pug.sprite > endSprite then
     pug.sprite = startSprite
   end
@@ -45,6 +46,11 @@ function pugHandle()
   if not pug.moving then
     pugAnimate(pug.startSpr, pug.endSpr)
   end
+  -- if btn(2) then
+  --   pug.moving = true
+  --   pug.y -= pug.speed
+  --   pug.sprite = pug.move.startSpr
+  -- end
 end
 
 -- function pugmoving()
@@ -124,7 +130,7 @@ function _draw()
   spr(pug.sprite, pug.x, pug.y, 1, 1, pug.flip)
 
   print(pug.sprite, 5 , 5, 14)
-  print(pug.moving, 5 , 17, 14)
+  print(pug.moving, 5 , 12, 14)
 
 end
 
